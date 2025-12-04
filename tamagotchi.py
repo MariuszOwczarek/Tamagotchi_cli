@@ -115,23 +115,46 @@ class Tamagotchi:
         self.__check_life_conditions()
 
     def status(self):
-        energy_bar = self.utils._draw_bar(self.energy,
-                                          self.max_energy,
-                                          status="energy")
+        status_dict = {
+            "Energy": (
+                self.utils._draw_bar(
+                    self.energy,
+                    self.max_energy,
+                    status="energy"
+                ),
+                f"{self.energy}/{self.max_energy}"
+            ),
 
-        hunger_bar = self.utils._draw_bar(self.hunger,
-                                          self.max_hunger,
-                                          status="hunger")
+            "Hunger": (
+                self.utils._draw_bar(
+                    self.hunger,
+                    self.max_hunger,
+                    status="hunger"
+                ),
+                f"{self.hunger}/{self.max_hunger}"
+            ),
 
-        happiness_bar = self.utils._draw_bar(self.happiness,
-                                             self.max_happiness,
-                                             status="happiness")
+            "Happiness": (
+                self.utils._draw_bar(
+                    self.happiness,
+                    self.max_happiness,
+                    status="happiness"
+                ),
+                f"{self.happiness}/{self.max_happiness}"
+            )
+        }
 
-        print(f"Name     : |{self.name}")
-        print(f"Age      : |{self.age}")
-        print(f"Energy   : |{energy_bar}| {self.energy}/{self.max_energy} ",
-              end="     ")
-        print(f"Hunger   : |{hunger_bar}| {self.hunger}/{self.max_hunger} ",
-              end="     ")
-        print(f"Happiness: |{happiness_bar}|"
-              f"{self.happiness}/{self.max_happiness}")
+        return status_dict
+
+    def draw_dashboard(self, name, age, bars_dict):
+        RESET = "\033[0m"
+        GREEN = "\033[32m"
+        GREY = "\033[90m"
+        print(f'{GREY}===================== STATUS =====================')
+        print(f'Name      : {name}')
+        print(f'Age       : {age}\033[0m')
+        print('')
+        for k, (bar, value_str) in bars_dict.items():
+            print('')
+            print(f'{GREEN}{k:9} : |{bar}| {value_str}{RESET}')
+        print(f'{GREY}=================================================={RESET}')

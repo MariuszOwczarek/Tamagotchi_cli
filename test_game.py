@@ -80,19 +80,32 @@ class TestGame:
         t.tick()
         assert t._is_alive is False
 
-    def test_status_returns_dict(self):
-        t = Tamagotchi(DEFAULT_SETTINGS)
-        info = t.status()
-        assert isinstance(info, dict)
-        assert info["Name"] == t.name
-        assert info["Age"] == t.age
-        assert info["Energy"] == t.energy
-        assert info["Hunger"] == t.hunger
-        assert info["Happiness"] == t.happiness
-
     def test_clear_screen_runs_without_error(self):
         u = Utils()
         try:
             u._clear_screen()
         except Exception:
             pytest.fail("clear_screen() raised Exception unexpectedly!")
+
+    def test_draw_dashboard(self):
+        t = Tamagotchi(DEFAULT_SETTINGS)
+        starus_dict = t.status()
+        try:
+            t.draw_dashboard(t.name, t.age, starus_dict)
+        except Exception:
+            pytest.fail("draw_dashboard() raised Exception unexpectedly!")
+
+
+# testowanie poza klasa
+def test_draw_dashboard_output_contains_keys(monkeypatch, capsys):
+    t = Tamagotchi(DEFAULT_SETTINGS)
+    monkeypatch.setattr(t.utils, "_clear_screen", lambda: None)
+
+    bars_dict = t.status()
+    t.draw_dashboard(t.name, t.age, bars_dict)
+
+    captured = capsys.readouterr()
+    # sprawdzamy, czy wypis zawiera np. słowa "Energy"
+    assert "Energy" in captured.out
+    assert "Hunger" in captured.out
+    assert "Happiness" in captured.out

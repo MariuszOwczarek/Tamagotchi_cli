@@ -11,22 +11,26 @@ class Game:
         self.utils = Utils()
 
     def info(self):
-        print("""
-             ================ TAMAGOTCHI ================
-                        Select one of the Options:
-                        1. Feed
-                        2. Play
-                        3. Sleep
-                        4. Status
-                        Q. Exit
-             ============================================
-             """)
+        GREY = "\033[90m"
+        RESET = "\033[0m"
+        print(f"""{GREY}================= TAMAGOTCHI v1.0 ================
+            Select one of the Options:
+                1. Feed
+                2. Play
+                3. Sleep
+                4. Status
+                Q. Exit
+=================================================={RESET}""")
 
     def run(self):
         while self.tamagotchi._is_alive:
             self.utils._clear_screen()
             self.info()
-            self.tamagotchi.status()
+            self.tamagotchi.draw_dashboard(
+                self.tamagotchi.name,
+                self.tamagotchi.age,
+                self.tamagotchi.status())
+
             choice = input("Choosen Action: ").strip().lower()
 
             match choice:
