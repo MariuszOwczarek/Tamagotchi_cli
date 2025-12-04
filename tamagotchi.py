@@ -1,4 +1,5 @@
 from settings import Settings, DEFAULT_SETTINGS
+from utils import Utils
 
 
 class Tamagotchi:
@@ -18,6 +19,7 @@ class Tamagotchi:
         self.__happiness = self.settings.start_happiness
         self._ticks_elapsed = 0
         self._is_alive = True
+        self.utils = Utils()
 
     @property
     def hunger(self):
@@ -96,7 +98,6 @@ class Tamagotchi:
         if not self._is_alive:
             print(self.status())
             return
-        print(self.status())
         return self._is_alive
 
     def __apply_tick_decay(self, n=1):
@@ -114,9 +115,23 @@ class Tamagotchi:
         self.__check_life_conditions()
 
     def status(self):
-        info = {"Name": self.name,
-                "Age": self.age,
-                "Energy": self.energy,
-                "Hunger": self.hunger,
-                "Happiness": self.happiness}
-        return info
+        energy_bar = self.utils._draw_bar(self.energy,
+                                          self.max_energy,
+                                          status="energy")
+
+        hunger_bar = self.utils._draw_bar(self.hunger,
+                                          self.max_hunger,
+                                          status="hunger")
+
+        happiness_bar = self.utils._draw_bar(self.happiness,
+                                             self.max_happiness,
+                                             status="happiness")
+
+        print(f"Name     : |{self.name}")
+        print(f"Age      : |{self.age}")
+        print(f"Energy   : |{energy_bar}| {self.energy}/{self.max_energy} ",
+              end="     ")
+        print(f"Hunger   : |{hunger_bar}| {self.hunger}/{self.max_hunger} ",
+              end="     ")
+        print(f"Happiness: |{happiness_bar}|"
+              f"{self.happiness}/{self.max_happiness}")

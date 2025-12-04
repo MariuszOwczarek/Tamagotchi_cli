@@ -1,12 +1,14 @@
 from settings import Settings, DEFAULT_SETTINGS
 from tamagotchi import Tamagotchi
 import sys
+from utils import Utils
 
 
 class Game:
     def __init__(self, settings: Settings = DEFAULT_SETTINGS):
         self.settings = settings
         self.tamagotchi = Tamagotchi(settings)
+        self.utils = Utils()
 
     def info(self):
         print("""
@@ -21,10 +23,11 @@ class Game:
              """)
 
     def run(self):
-
         while self.tamagotchi._is_alive:
+            self.utils._clear_screen()
             self.info()
-            choice = input("Choose Action: ").strip().lower()
+            self.tamagotchi.status()
+            choice = input("Choosen Action: ").strip().lower()
 
             match choice:
                 case '1':

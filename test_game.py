@@ -1,5 +1,7 @@
 from tamagotchi import Tamagotchi
 from settings import DEFAULT_SETTINGS
+from utils import Utils
+import pytest
 
 
 class TestGame:
@@ -87,3 +89,10 @@ class TestGame:
         assert info["Energy"] == t.energy
         assert info["Hunger"] == t.hunger
         assert info["Happiness"] == t.happiness
+
+    def test_clear_screen_runs_without_error(self):
+        u = Utils()
+        try:
+            u._clear_screen()
+        except Exception:
+            pytest.fail("clear_screen() raised Exception unexpectedly!")
